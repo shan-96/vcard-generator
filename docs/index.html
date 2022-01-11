@@ -5,7 +5,7 @@
 		<meta charset="utf-8" />
 		<title>V-Card Generator</title>
 		<script src="../dist/easy.qrcode.min.js" type="text/javascript" charset="utf-8"></script>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 		<style type="text/css">
 			body{
 				margin: 0;
@@ -125,15 +125,16 @@
 
         <div id="form">
             <br>
-            <form>
+            <form action="#" id="form_data">
                 Full Name: <input type="text" name="name"><br><br>
-                Phone:     <input type="text" name="name"><br><br>
-                Email: <input type="email" name="name"><br><br>
-                Organization: <input type="text" name="name"><br><br>
-                Title: <input type="text" name="name"><br><br>
-                Website: <input type="url" name="name"><br><br>
-                <input type="button" onclick="generateQR()" value="Generate">
+                Phone: <input type="text" name="phone"><br><br>
+                Email: <input type="email" name="email"><br><br>
+                Organization: <input type="text" name="org"><br><br>
+                Title: <input type="text" name="title"><br><br>
+                Website: <input type="url" name="website"><br><br>
+                <!-- <input type="button" onclick="generateQR()" value="Generate"> -->
             </form>
+            <button>Generate</button>
 		</div>
 		
 		
@@ -150,18 +151,53 @@
 			</div>
 </script>
 		<script type="text/javascript">
-			var demoParams = [
-				
+            $(document).ready(function() {
+                $("button").click(function() {
+                    var formDetails = $("form").serializeArray();
+                    // $.each(formDetails, function(i, field) {
+                    //     alert(field.name + ": "+ field.value + "");
+                    // });
+                    generateQR(formDetails);
+                });
+            });
+			function generateQR(formDetails) {
+                var full_name;
+                var phone;
+                var email;
+                var org;
+                var title;
+                var website;
+                $.each(formDetails, function(i, field) {
+                    if (field.name == "name") {
+                        full_name = field.value;
+                    }
+                    if (field.name == "phone") {
+                        phone = field.value;
+                    }
+                    if (field.name == "email") {
+                        email = field.value;
+                    }
+                    if (field.name == "org") {
+                        org = field.value;
+                    }
+                    if (field.name == "title") {
+                        title = field.value;
+                    }
+                    if (field.name == "website") {
+                        website = field.value;
+                    }
+                });
+                var demoParams = [
 				{
-					title: "<a>Your V-card</a>",
+					title: "<a href='google.com'>Your V-card</a>",
 					config: {
 						text: "BEGIN:VCARD\r\nVERSION:3.0\r\n" +
-                        "FN:Shantanu Patil\r\n" +
-                        "TEL;TYPE=work,voice:9111100000\r\n" +
-                        "EMAIL;TYPE=internet,pref:shantanu@email.com\r\n" +
-                        "ORG:Deriv Group Ltd\r\n" +
-                        "TITLE:Software Engineer\r\n" +
-                        "URL;TYPE=work:www.example.com\r\n" + 
+                        "FN:" + full_name + "\r\n" +
+                        "TEL;TYPE=work,voice:" + phone + "\r\n" +
+                        "EMAIL;TYPE=internet,pref:"+ email + "\r\n" +
+                        "ORG:" + org + "\r\n" +
+                        "TITLE:" + title + "\r\n" +
+                        "URL;TYPE=work:" + website + "\r\n" + 
                         "END:VCARD", // Content
 
 						width: 240, // Widht
@@ -198,16 +234,17 @@
 
 				},
 
-			]
+                ]
 
-			var qrcodeTpl = document.getElementById("qrcodeTpl").innerHTML;
-			var container = document.getElementById('container');
+                var qrcodeTpl = document.getElementById("qrcodeTpl").innerHTML;
+                var container = document.getElementById('container');
 
-			for (var i = 0; i < demoParams.length; i++) {
-				var qrcodeHTML = qrcodeTpl.replace(/\{title\}/, demoParams[i].title).replace(/{i}/, i);
-				container.innerHTML+=qrcodeHTML;
-			}
-			for (var i = 0; i < demoParams.length; i++) {
-				 var t=new QRCode(document.getElementById("qrcode_"+i), demoParams[i].config);
-			}
+                for (var i = 0; i < demoParams.length; i++) {
+                    var qrcodeHTML = qrcodeTpl.replace(/\{title\}/, demoParams[i].title).replace(/{i}/, i);
+                    container.innerHTML=qrcodeHTML;
+                }
+                for (var i = 0; i < demoParams.length; i++) {
+                    var t=new QRCode(document.getElementById("qrcode_"+i), demoParams[i].config);
+                }
+            }
 		</script>
