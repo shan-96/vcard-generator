@@ -130,6 +130,7 @@
                 Phone: <input type="text" name="phone"><br><br>
                 Email: <input type="email" name="email"><br><br>
                 Organization: <input type="text" name="org"><br><br>
+                Address: <input type="text" name="address"><br><br>
                 Title: <input type="text" name="title"><br><br>
                 Website: <input type="url" name="website"><br><br>
                 <!-- <input type="button" onclick="generateQR()" value="Generate"> -->
@@ -185,6 +186,15 @@
                     }
                     if (field.name == "website") {
                         website = field.value;
+                        if (website.startsWith("http://")) {
+                            website.replace("http://", "");
+                            website = "https://" + website;
+                        } else if (!website.startsWith("https://")) {
+                            website = "https://" + website;
+                        }
+                    }
+                    if (field.name == "address") {
+                        address = field.value;
                     }
                 });
                 var demoParams = [
@@ -196,6 +206,7 @@
                         "TEL;TYPE=work,voice:" + phone + "\r\n" +
                         "EMAIL;TYPE=internet,pref:"+ email + "\r\n" +
                         "ORG:" + org + "\r\n" +
+                        "ADR;TYPE=work:" + address + "\r\n" +
                         "TITLE:" + title + "\r\n" +
                         "URL;TYPE=work:" + website + "\r\n" + 
                         "END:VCARD", // Content
