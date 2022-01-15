@@ -131,7 +131,9 @@
                 Phone: <input type="text" name="phone"><br><br>
                 Email: <input type="email" name="email"><br><br>
                 Organization: <input type="text" name="org"><br><br>
-                Address: <input type="text" name="address"><br><br>
+                Address: <input type="text" name="address1" placeholder="line1"><br><br>
+                <input type="text" name="address2" placeholder="line2"><br><br>
+                <input type="text" name="address3" placeholder="line3"><br><br>
                 Title: <input type="text" name="title"><br><br>
                 Website: <input type="url" name="website"><br><br>
                 <!-- <input type="button" onclick="generateQR()" value="Generate"> -->
@@ -170,6 +172,7 @@
                 var org;
                 var title;
                 var website;
+                var address1, address2, address3;
                 $.each(formDetails, function(i, field) {
                     if (field.name == "fname") {
                         first_name = field.value;
@@ -198,23 +201,30 @@
                             website = "https://" + website;
                         }
                     }
-                    if (field.name == "address") {
-                        address = field.value;
+                    if (field.name == "address1") {
+                        address1 = field.value;
+                    }
+                    if (field.name == "address2") {
+                        address2 = field.value;
+                    }
+                    if (field.name == "address3") {
+                        address3 = field.value;
                     }
                 });
                 var full_name = first_name + " " + last_name;
+                var address = ";;" + address1 + ";" + address2 + ";" + address3;
                 var demoParams = [
 				{
 					title: "<a href='#' onclick='return download()'>Your V-card</a>",
 					config: {
 						text: "BEGIN:VCARD\r\nVERSION:3.0\r\n" +
                         "N:" + last_name + ";" + first_name + "\r\n" +
-                        "TEL;TYPE=work,voice:" + phone + "\r\n" +
-                        "EMAIL;TYPE=internet,pref:"+ email + "\r\n" +
-                        "ORG:" + org + "\r\n" +
+                        "URL:" + website + "\r\n" +
+                        "EMAIL;TYPE=work:"+ email + "\r\n" +
+                        "TEL;TYPE=work:" + phone + "\r\n" +
                         "ADR;TYPE=work:" + address + "\r\n" +
+                        "ORG:" + org + "\r\n" +
                         "TITLE:" + title + "\r\n" +
-                        "URL;TYPE=work:" + website + "\r\n" + 
                         "END:VCARD", // Content
 
 						width: 240, // Widht
